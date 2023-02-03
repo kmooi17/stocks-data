@@ -9,6 +9,14 @@ import { Stock } from './stocks/models/stock.interface';
 import { StockValuesDialogComponent } from './stocks/stock-values-dialog/stock-values-dialog.component';
 import { StockService } from './stocks/stock.service';
 
+export const success = {
+  panelClass: ['snack-bar', 'success'],
+};
+
+export const error = {
+  panelClass: ['snack-bar', 'error'],
+};
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -20,14 +28,6 @@ export class AppComponent implements AfterViewInit {
   pageSizeOptions = [5, 10, 25, 100];
   stockId = 0;
   stocks: Stock[] = [];
-
-  success = {
-    panelClass: ['snack-bar', 'success'],
-  };
-
-  error = {
-    panelClass: ['snack-bar', 'error'],
-  };
 
   stockDisplayedColumns = [
     'stock',
@@ -75,13 +75,13 @@ export class AppComponent implements AfterViewInit {
       next: (res: Stock[]) => {
         this.stocks = res;
         this.stockDataSource = new MatTableDataSource(this.stocks);
-        this.snackbar.open(`You've got stock!`, undefined, this.success);
+        this.snackbar.open(`You've got stock!`, undefined, success);
       },
       error: (err: unknown) => {
         this.snackbar.open(
           `Something went wrong with retrieving your stocks`,
           undefined,
-          this.error
+          error
         );
         console.log(err);
         this.loading = false;
@@ -108,7 +108,7 @@ export class AppComponent implements AfterViewInit {
         this.snackbar.open(
           `You've got some useful stock values!`,
           undefined,
-          this.success
+          success
         );
 
         this.dialog.open(StockValuesDialogComponent, {
@@ -124,7 +124,7 @@ export class AppComponent implements AfterViewInit {
         this.snackbar.open(
           `Something went wrong with retrieving your stock values`,
           undefined,
-          this.error
+          error
         );
         console.log(err);
         this.loading = false;

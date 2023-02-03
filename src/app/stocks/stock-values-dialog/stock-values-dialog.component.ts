@@ -1,8 +1,10 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { success, error } from 'src/app/app.component';
 import { StockValues } from '../models/stock-values.interface';
 import { Stock } from '../models/stock.interface';
 
@@ -24,7 +26,8 @@ export class StockValuesDialogComponent implements OnInit {
       stockId: number;
       stocks: Stock[];
       stockValuesDataSource: MatTableDataSource<StockValues>;
-    }
+    },
+    private snackbar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
@@ -51,5 +54,42 @@ export class StockValuesDialogComponent implements OnInit {
     }
 
     return '';
+  }
+
+  exportAsJson(): void {
+    try {
+      const jsonData = this.data.stockValuesDataSource.data.map(
+        (values: StockValues) => {
+          return {
+            stock: this.getStockName(values.stock_id),
+            date: values.date,
+            value: values.value,
+          };
+        }
+      );
+
+      const jsonString = JSON.stringify(jsonData);
+      const element = document.createElement('a');
+      element.setAttribute(
+        'href',
+        'data:text/json;charset=UTF-8,' + encodeURIComponent(jsonString)
+      );
+      const fileName =
+        jsonData[0].stock + '_' + new Date().toDateString() + '.json';
+      element.setAttribute('download', fileName);
+      element.style.display = 'none';
+      document.body.appendChild(element);
+      element.click();
+      document.body.removeChild(element);
+
+      this.snackbar.open(
+        `Successfully downloaded ${fileName}`,
+        undefined,
+        success
+      );
+    } catch (err: unknown) {
+      this.snackbar.open(`Failed to download file.`, undefined, error);
+      console.log(err);
+    }
   }
 }
