@@ -1,1 +1,42 @@
-/* You can add global styles to this file, and also import other style files */
+/* Main Styles */
+html,
+body {
+  background-color: #303030;
+  color: white;
+  height: 100%;
+  min-width: 675px;
+  scroll-behavior: smooth;
+}
+
+.table-container {
+  display: flex;
+  flex-direction: column;
+  min-width: 300px;
+  margin: 1rem;
+}
+
+.main-table-header {
+  min-height: 64px;
+  padding: 1rem 1.5rem 0;
+}
+
+.mat-form-field {
+  width: 50%;
+}
+
+.mat-table {
+  overflow: auto;
+  max-height: 500px;
+}
+
+.snack-bar {
+  &.success {
+    color: black;
+    background: #15e187;
+  }
+
+  &.error {
+    color: white;
+    background: #b50509;
+  }
+}
